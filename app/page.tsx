@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { setToken, setUser } from "@/redux/auth/auth.slice";
+import { setToken } from "@/redux/auth/auth.slice";
 import useAuthSession from "../hooks/useAuthSession";
 import { useAppDispatch } from "@/redux/store";
 import { enqueueSnackbar, SnackbarProvider } from "notistack";
@@ -28,7 +28,6 @@ const HomePage = () => {
           const data = await res.json();
           const { token, user } = data;
 
-          localStorage.setItem("token", token);
           dispatch(setToken(token));
           // dispatch(setUser(user));
           console.log("Login successful");
