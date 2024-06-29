@@ -8,11 +8,9 @@ const useAuthSession = () => {
   const user = useSelector((state: RootState) => state.auth.user);
   const token = useSelector((state: RootState) => state.auth.token);
 
-  console.log("runs everytime")
   //  implement the logic here to check user session
   useEffect(() => {
     if (token) {
-      console.log("running")
       fetch("/api/auth/me", {
         method: "GET",
         headers: {
@@ -20,12 +18,10 @@ const useAuthSession = () => {
         },
       })
         .then((response) => {
-          console.log("response", response);
           if (response.ok) return response.json();
           throw new Error("Unauthorized");
         })
         .then((data) => {
-          console.log(data);
           dispatch(setUser(data.user));
         })
         .catch(() => {
@@ -35,10 +31,7 @@ const useAuthSession = () => {
       dispatch(clearAuth());
     }
 
-    // console.log(user, token);
   }, [dispatch, token]);
-
-  console.log("hhok after:", user, token);
 
   return user;
 };

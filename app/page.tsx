@@ -29,8 +29,6 @@ const HomePage = () => {
           const { token, user } = data;
 
           dispatch(setToken(token));
-          // dispatch(setUser(user));
-          console.log("Login successful");
 
           enqueueSnackbar("Successfully Logged In!", {
             variant: "success",
