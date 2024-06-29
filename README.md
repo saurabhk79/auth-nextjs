@@ -1,1 +1,1 @@
-# auth-nextjs
+# Next auth assignment
