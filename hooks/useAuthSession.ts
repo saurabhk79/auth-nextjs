@@ -6,32 +6,39 @@ import { RootState } from "@/redux/store";
 const useAuthSession = () => {
   const dispatch = useDispatch();
   const user = useSelector((state: RootState) => state.auth.user);
-  const token = useSelector((state: RootState) => state.auth.token);
+  const token =
+    useSelector((state: RootState) => state.auth.token) ||
+    localStorage.getItem("token");
 
   //  implement the logic here to check user session
   useEffect(() => {
-
     if (token) {
-      fetch('/api/auth/me', {
-        method: 'GET',
+      fetch("/api/auth/me", {
+        method: "GET",
         headers: {
-          'Authorization': `Bearer ${token}`
-        }
+          Authorization: `Bearer ${token}`,
+        },
       })
-      .then(response => {
-        if (response.ok) return response.json();
-        throw new Error('Unauthorized');
-      })
-      .then(data => {
-        dispatch(setUser({ username: data.userId }));
-      })
-      .catch(() => {
-        dispatch(clearAuth());
-      });
+        .then((response) => {
+          if (response.ok) return response.json();
+          throw new Error("Unauthorized");
+        })
+        .then((data) => {
+          dispatch(setUser(data.user));
+        })
+        .catch(() => {
+          dispatch(clearAuth());
+          localStorage.clear()
+        });
     } else {
       dispatch(clearAuth());
+      localStorage.clear()
     }
+
+    console.log(user, token);
   }, [dispatch]);
+
+  console.log("hhok after:", user, token);
 
   return user;
 };
