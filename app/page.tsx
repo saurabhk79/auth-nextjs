@@ -13,7 +13,50 @@ const HomePage = () => {
 
   const handleLogin = async () => {
     // Implement the logic to authenticate the user
+    if (validateUser()) {
+      try {
+        const res = await fetch('/api/auth/login', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({ username, password })
+        });
+  
+        if (res.ok) {
+          const data = await res.json();
+          const { token } = data;
+          localStorage.setItem('token', token);
+  
+          dispatch(setToken(token));
+          console.log('Login successful');
+        } else {
+          const errorData = await res.json();
+          console.error('Login failed:', errorData);
+        }
+      } catch (error) {
+        console.error('Login failed:', error.message);
+      }
+    }
   };
+
+  const validateUser = () => {
+    if (username.length === 0){
+      console.log("User name must not be empty")
+      return false;
+    }
+
+    if (password.length < 6){
+      console.log("User name must be of length more than 6")
+      return false;
+    }
+
+    return true;
+  }
+
+  if (user) {
+    console.log(user)
+  }
 
   return (
     <div className="flex items-center justify-center h-screen bg-gray-100">
@@ -24,20 +67,20 @@ const HomePage = () => {
           </div>
         ) : (
           <div>
-            <h2 className="text-2xl font-bold text-center">Login</h2>
+            <h2 className="text-2xl font-bold text-center text-blue-500">Login</h2>
             <input
               type="text"
               value={username}
               onChange={(e) => setUsername(e.target.value)}
               placeholder="Username"
-              className="w-full px-4 py-2 mt-4 border rounded-md"
+              className="w-full px-4 py-2 mt-4 border rounded-md text-black"
             />
             <input
               type="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               placeholder="Password"
-              className="w-full px-4 py-2 mt-4 border rounded-md"
+              className="w-full px-4 py-2 mt-4 border rounded-md text-black"
             />
             <button
               onClick={handleLogin}
